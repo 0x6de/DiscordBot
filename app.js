@@ -29,8 +29,8 @@ const client = new Discord.Client();
 //
 // BOT START
 //
-client.on("ready", () => {
   // This event will run if the bot starts, and logs in, successfully.
+client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds. - ${client.readyAt} `);
   // client.channels.get('337987760025763840').send(` :white_check_mark:  Bip Bop ! - ${client.readyAt}` );
   //
