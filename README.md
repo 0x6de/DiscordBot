@@ -6,6 +6,7 @@ ___________________________________________________
 require('discord.js');
 require('snoowrap');
 require('request');
+require('xmlhttprequest');
 ```
 
 
