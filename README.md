@@ -1,6 +1,20 @@
 # DiscordBot
 ___________________________________________________
 
+## Installation
+
+* Install the latest nodejs https://nodejs.org/en/download/
+* clone the project
+* edit [config files](#config-files) with your tokens
+* Go to the DiscordBot Directory and open a command prompt and type:
+ ```
+  npm install
+```
+```
+  node app.js
+```
+
+
 ## config files:
 
 * #### config.json
