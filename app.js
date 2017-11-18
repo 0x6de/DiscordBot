@@ -12,6 +12,8 @@ var CurrentUrl = 'currenturl';
 var LastUrl = 'lasturl';
 var CurrentStream = 'currentstream';
 var LastStream = 'laststream';
+var CurrentPatch = "CurrentPatch";
+var LastPatch = "LastPatch";
 var cacheTitre;
 var urlfin;
 
@@ -31,10 +33,11 @@ const client = new Discord.Client();
 //
   // This event will run if the bot starts, and logs in, successfully.
 client.on("ready", () => {
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds. - ${client.readyAt} `);
   // client.channels.get('337987760025763840').send(` :white_check_mark:  Bip Bop ! - ${client.readyAt}` );
+  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds. - ${client.readyAt} `);
+
   //
-  // Reddit Functions
+  // Reddit games Function
   //
   function checkLink() {
     tickRate2 = 60000
@@ -57,6 +60,28 @@ client.on("ready", () => {
     setTimeout(checkLink, tickRate2);
   };
   checkLink();
+  //
+  // Reddit Patch Function
+  //
+  function checkPatch() {
+    PatchRate = 120000
+    r._get({uri:
+      'r/DotA2/search?q=Dota%202%20Update%20AND%20(author:sirbelvedere%20OR%20author:Magesunite%20OR%20author:Cyborgmatt)&restrict_sr=on&sort=new&t=week'
+    }).map(post => post.url).then((Patch) => {
+        CurrentPatch = Patch[0] ;
+        Patchfix = Patch.toString().split(',');
+        if (CurrentPatch.toString() === LastPatch.toString()) {
+
+        } else if (CurrentPatch.toString() !== LastPatch.toString()) {
+          // send message in channel and set LastPatch
+          Patchfin = Patchfix[0];
+          client.channels.get('381493167981199361').send( " :notepad_spiral:  Nouveau patchnote :  :notepad_spiral:  \n " + Patchfin );
+          LastPatch = CurrentPatch;
+        }
+      })
+    setTimeout(checkPatch, PatchRate);
+    };
+  checkPatch();
   //
   //Twitch Functions
   //
