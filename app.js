@@ -56,7 +56,9 @@ client.on("ready", () => {
             LastUrl = CurrentUrl;
           }
         }
-    })
+    }).catch({statusCode: 401}, e => {
+      console.log("oauth games error !");
+    });
     setTimeout(checkLink, tickRate2);
   };
   checkLink();
@@ -64,7 +66,7 @@ client.on("ready", () => {
   // Reddit Patch Function
   //
   function checkPatch() {
-    PatchRate = 120000
+    PatchRate = 90000
     r._get({uri:
       'r/DotA2/search?q=Dota%202%20Update%20AND%20(author:sirbelvedere%20OR%20author:Magesunite%20OR%20author:Cyborgmatt)&restrict_sr=on&sort=new&t=week'
     }).map(post => post.url).then((Patch) => {
@@ -78,7 +80,9 @@ client.on("ready", () => {
           client.channels.get('381493167981199361').send( " :notepad_spiral:  Nouveau patchnote :  :notepad_spiral:  \n " + Patchfin );
           LastPatch = CurrentPatch;
         }
-      })
+      }).catch({statusCode: 401}, e => {
+        console.log("oauth checkpatch error !");
+      });
     setTimeout(checkPatch, PatchRate);
     };
   checkPatch();
