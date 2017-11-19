@@ -92,7 +92,7 @@ client.on("ready", () => {
     xhr.onreadystatechange = function () {
       if(xhr.readyState == 4) {
         var data = JSON.parse(xhr.responseText)
-        if(data["stream"] != null){
+        if(data["stream"] != null && data["stream"] != undefined){
           CurrentStream = data["stream"]["created_at"];
           if (CurrentStream.toString() === LastStream.toString()) {
 
@@ -105,6 +105,8 @@ client.on("ready", () => {
 
               LastStream = CurrentStream;
           }
+        } else if (data["stream"] === undefined) {
+          console.log("twitch api down !");
         }
       setTimeout(checkStream, tickRate)
       }
