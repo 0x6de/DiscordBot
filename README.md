@@ -16,7 +16,8 @@ require('xmlhttprequest');
    discord token, and prefix string
 
 ```
-    { "token"  : "YOUR_DISCORD_TOKEN",
+    {
+      "token"  : "YOUR_DISCORD_TOKEN",
       "prefix" : "/"
     }
 ```
