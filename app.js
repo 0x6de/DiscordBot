@@ -95,7 +95,11 @@ client.on("ready", () => {
     xhr.open("GET", "https://api.twitch.tv/kraken/streams/mistermv?client_id="+confInfo.twitch_id, true)
     xhr.onreadystatechange = function () {
       if(xhr.readyState == 4) {
-        var data = JSON.parse(xhr.responseText)
+        try {
+          var data = JSON.parse(xhr.responseText)
+        } catch (e) {
+          console.log("failed to parse json");
+        }
         if(data["stream"] != null && data["stream"] != undefined){
           CurrentStream = data["stream"]["created_at"];
           if (CurrentStream.toString() === LastStream.toString()) {
