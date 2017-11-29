@@ -96,10 +96,7 @@ client.on("ready", () => {
     xhr.onreadystatechange = function () {
       if(xhr.readyState == 4) {
         try {
-          var data = JSON.parse(xhr.responseText)
-        } catch (e) {
-          console.log("failed to parse json");
-        }
+        var data = JSON.parse(xhr.responseText)
         if(data["stream"] != null && data["stream"] != undefined){
           CurrentStream = data["stream"]["created_at"];
           if (CurrentStream.toString() === LastStream.toString()) {
@@ -115,6 +112,9 @@ client.on("ready", () => {
           }
         } else if (data["stream"] === undefined) {
           console.log("twitch api down !");
+        }
+      } catch (e) {
+          console.log("failed to parse json");
         }
       setTimeout(checkStream, tickRate)
       }
