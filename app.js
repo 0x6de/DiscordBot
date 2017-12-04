@@ -105,7 +105,7 @@ client.on("ready", () => {
               cacheJeu = data["stream"]["game"];
               cacheLien = data["stream"]["channel"]["url"];
               cacheTitre = data["stream"]["channel"]["status"];
-              client.channels.get('263750418708824075').send( cacheTitre + "\n" + cacheJeu + "\n" + cacheLien );
+              client.channels.get('387261264084074497').send( cacheTitre + "\n" + cacheJeu + "\n" + cacheLien );
               console.log("message stream ON !");
 
               LastStream = CurrentStream;
