@@ -40,28 +40,33 @@ client.on("ready", () => {
   // Reddit games Function
   //
   function checkLink() {
-    tickRate2 = 60000
-    //check new post
-    r.getNew("FreeGameFindings", {limit: 1}).map(post => post.url).then((url) => {
-       CurrentUrl = url ;
-       urlfix = url.toString().split(',');
-       if (CurrentUrl.toString() === LastUrl.toString()) {
-
-       } else if (CurrentUrl.toString() !== LastUrl.toString()) {
-          // send message in channel and set lasturl
-          if (urlfix[0].toLowerCase().indexOf("humblebundle.com/store") > -1  || urlfix[0].toLowerCase().indexOf("gog.com") > -1 || urlfix[0].toLowerCase().indexOf("store.steampowered.com/app") > -1 )  {
-            urlfin = urlfix[0];
-            client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + urlfin );
-            console.log("message jeu!!" + urlfin);
-            LastUrl = CurrentUrl;
+  tickRate2 = 60000
+  //check new post
+    r.getSubreddit('FreeGameFindings').getNew({limit: 1}).then(posts => {
+     CurrentTitle = posts.map(post => post.title);
+     CurrentUrl = posts.map(post => post.url);
+     CurrentPermalink = posts.map(post => post.permalink);
+     if (CurrentUrl[0].toString() === LastUrl.toString()) {
+     } else if (CurrentUrl[0].toString() !== LastUrl.toString()) {
+        // send message in channel and set lasturl
+        if (CurrentUrl[0].toLowerCase().indexOf("humblebundle.com/store") > -1  || CurrentUrl[0].toLowerCase().indexOf("gog.com") > -1 || CurrentUrl[0].toLowerCase().indexOf("store.steampowered.com/app") > -1 )  {
+          if (CurrentTitle[0].toLowerCase().indexOf("dlc") > -1) {
+            client.channels.get('337987760025763840').send( " @everyone Nouveau DLC gratuit :   \n " + CurrentUrl[0] );
+            console.log("message DLC: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
+            LastUrl = CurrentUrl[0];
+          }else {
+            client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + CurrentUrl[0] );
+            console.log("message jeu: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
+            LastUrl = CurrentUrl[0];
           }
         }
-    }).catch({statusCode: 401}, e => {
-      console.log("oauth games error !");
-    });
-    setTimeout(checkLink, tickRate2);
-  };
-  checkLink();
+      }
+  }).catch({statusCode: 401}, e => {
+    console.log("oauth games error !");
+  });
+  setTimeout(checkLink, tickRate2);
+};
+checkLink();
   //
   // Reddit Patch Function
   //
