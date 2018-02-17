@@ -49,9 +49,9 @@ client.on("ready", () => {
 
        } else if (CurrentUrl.toString() !== LastUrl.toString()) {
           // send message in channel and set lasturl
-          if (urlfix[0].indexOf("humblebundle") > -1  || urlfix[0].indexOf("gog.com") > -1 || urlfix[0].indexOf("store.steampowered.com") > -1 )  {
+          if (urlfix[0].indexOf("humblebundle.com/store") > -1  || urlfix[0].indexOf("gog.com") > -1 || urlfix[0].indexOf("store.steampowered.com") > -1 )  {
             urlfin = urlfix[0];
-            client.channels.get('337987760025763840').send( " :small_orange_diamond:  @everyone Nouveau jeu gratuit :  :small_orange_diamond:   \n " + urlfin );
+            client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + urlfin );
             console.log("message jeu!!" + urlfin);
             LastUrl = CurrentUrl;
           }
@@ -68,7 +68,7 @@ client.on("ready", () => {
   function checkPatch() {
     PatchRate = 90000
     r._get({uri:
-      'r/DotA2/search?q=Dota%202%20Update%20AND%20(author:sirbelvedere%20OR%20author:Magesunite%20OR%20author:Cyborgmatt)&restrict_sr=on&sort=new&t=week'
+      'r/DotA2/search?q=Dota%202%20Update%20AND%20(author:sirbelvedere%20OR%20author:Magesunite%20OR%20author:Cyborgmatt)&restrict_sr=on&sort=new&t=hour'
     }).map(post => post.url).then((Patch) => {
         CurrentPatch = Patch[0] ;
         Patchfix = Patch.toString().split(',');
@@ -77,7 +77,7 @@ client.on("ready", () => {
         } else if (CurrentPatch.toString() !== LastPatch.toString()) {
           // send message in channel and set LastPatch
           Patchfin = Patchfix[0];
-          client.channels.get('381493167981199361').send( " :notepad_spiral:  Nouveau patchnote :  :notepad_spiral:  \n " + Patchfin );
+          client.channels.get('381493167981199361').send( " Nouveau patchnote :  :notepad_spiral:  \n " + Patchfin );
           LastPatch = CurrentPatch;
         }
       }).catch({statusCode: 401}, e => {
@@ -90,9 +90,9 @@ client.on("ready", () => {
   //Twitch Functions
   //
   function checkStream() {
-    tickRate = 60000
+    tickRate = 30000
     var xhr = new XMLHttpRequest()
-    xhr.open("GET", "https://api.twitch.tv/kraken/streams/mistermv?client_id="+confInfo.twitch_id, true)
+    xhr.open("GET", "https://api.twitch.tv/kraken/streams/"+ confInfo.twitch_stream +"?client_id="+confInfo.twitch_id, true)
     xhr.onreadystatechange = function () {
       if(xhr.readyState == 4) {
         try {
