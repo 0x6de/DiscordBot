@@ -49,7 +49,7 @@ client.on("ready", () => {
 
        } else if (CurrentUrl.toString() !== LastUrl.toString()) {
           // send message in channel and set lasturl
-          if (urlfix[0].indexOf("humblebundle.com/store") > -1  || urlfix[0].indexOf("gog.com") > -1 || urlfix[0].indexOf("store.steampowered.com") > -1 )  {
+          if (urlfix[0].toLowerCase().indexOf("humblebundle.com/store") > -1  || urlfix[0].toLowerCase().indexOf("gog.com") > -1 || urlfix[0].toLowerCase().indexOf("store.steampowered.com/app") > -1 )  {
             urlfin = urlfix[0];
             client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + urlfin );
             console.log("message jeu!!" + urlfin);
@@ -68,7 +68,7 @@ client.on("ready", () => {
   function checkPatch() {
     PatchRate = 90000
     r._get({uri:
-      'r/DotA2/search?q=Dota%202%20Update%20AND%20(author:sirbelvedere%20OR%20author:Magesunite%20OR%20author:Cyborgmatt)&restrict_sr=on&sort=new&t=hour'
+      'r/DotA2/search?q=Dota%202%20Update%20AND%20(author:sirbelvedere%20OR%20author:Magesunite%20OR%20author:Cyborgmatt)&restrict_sr=on&sort=new&t=week'
     }).map(post => post.url).then((Patch) => {
         CurrentPatch = Patch[0] ;
         Patchfix = Patch.toString().split(',');
