@@ -32,6 +32,7 @@ require('xmlhttprequest');
       "client_secret": "YOUR_CLIENT_SECRET",
       "username": "YOUR_USERNAME",
       "password": "YOUR_PASSWORD",
-      "twitch_id": "YOUR_TWITCH_CLIENTID"
+      "twitch_id": "YOUR_TWITCH_CLIENTID",
+      "twitch_stream": "TWITCH_CHANNEL"
     }
 ```
