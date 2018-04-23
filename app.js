@@ -71,7 +71,7 @@ checkLink();
   // Reddit Patch Function
   //
   function checkPatch() {
-    PatchRate = 90000
+    PatchRate = 60000
     r._get({uri:
       'r/DotA2/search?q=Dota%202%20Update%20AND%20(author:sirbelvedere%20OR%20author:Magesunite%20OR%20author:Cyborgmatt)&restrict_sr=on&sort=new&t=week'
     }).map(post => post.url).then((Patch) => {
@@ -83,6 +83,7 @@ checkLink();
           // send message in channel and set LastPatch
           Patchfin = Patchfix[0];
           client.channels.get('381493167981199361').send( " Nouveau patchnote :  :notepad_spiral:  \n " + Patchfin );
+
           LastPatch = CurrentPatch;
         }
       }).catch({statusCode: 401}, e => {
@@ -90,7 +91,9 @@ checkLink();
       });
     setTimeout(checkPatch, PatchRate);
     };
-  checkPatch();
+  // checkPatch();
+
+
   //
   //Twitch Functions
   //
@@ -170,7 +173,6 @@ client.on("message", async message => {
   if(command === "help") {
     message.reply("\
      \n :small_blue_diamond: /ping -> ping the bot to check the latency.\
-     \n :small_blue_diamond: /say -> makes the bot say something and delete the message.\
      \n :small_blue_diamond: /uptime -> Bot uptime in a clean format.\
      \n :small_blue_diamond: /random -> random la classe americaine.");
   }
