@@ -54,7 +54,10 @@ client.on("ready", () => {
             client.channels.get('337987760025763840').send( " @everyone Nouveau DLC gratuit :   \n " + CurrentUrl[0] );
             console.log("message DLC: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
             LastUrl = CurrentUrl[0];
-          }else {
+          } else if (CurrentTitle[0].toLowerCase().indexOf("gwent") > -1) {
+              console.log("gwent : "+ CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
+              LastUrl = CurrentUrl[0];
+          } else {
             client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + CurrentUrl[0] );
             console.log("message jeu: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
             LastUrl = CurrentUrl[0];
