@@ -7,6 +7,7 @@ require('discord.js');
 require('snoowrap');
 require('request');
 require('xmlhttprequest');
+require('fs');
 ```
 
 
@@ -35,4 +36,10 @@ require('xmlhttprequest');
       "twitch_id": "YOUR_TWITCH_CLIENTID",
       "twitch_stream": "TWITCH_CHANNEL"
     }
+```
+* #### banlist.json
+   banlist games
+
+```
+    ["game1", "game2"]
 ```

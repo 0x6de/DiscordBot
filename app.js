@@ -2,20 +2,26 @@
 const Discord = require('discord.js');
 const snoowrap = require('snoowrap');
 const request = require('request');
+
 //config files
 const config = require("./config.json");
 const confInfo = require("./oauth_info.json");
+const confBanlist = require("./banlist.json");
 // Var testbot
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var fs = require('fs');
 var xhr = new XMLHttpRequest();
 var CurrentUrl = 'currenturl';
 var LastUrl = 'lasturl';
+var LastUrlBanned = 'lasturlbanned';
 var CurrentStream = 'currentstream';
 var LastStream = 'laststream';
 var CurrentPatch = "CurrentPatch";
 var LastPatch = "LastPatch";
+var CurrentBan = 0;
 var cacheTitre;
 var urlfin;
+
 
 //Reddit auth
 const r = new snoowrap({
@@ -41,26 +47,42 @@ client.on("ready", () => {
   //
   function checkLink() {
   tickRate2 = 60000
+  
+  // next banlist method 
+  //
+  // confBanlist.push('test');
+  // var json = JSON.stringify(confBanlist);
+  // fs.writeFile('banlist.json', json);
+  // console.log(confBanlist);
+  
   //check new post
     r.getSubreddit('FreeGameFindings').getNew({limit: 1}).then(posts => {
      CurrentTitle = posts.map(post => post.title);
      CurrentUrl = posts.map(post => post.url);
      CurrentPermalink = posts.map(post => post.permalink);
-     if (CurrentUrl[0].toString() === LastUrl.toString()) {
-     } else if (CurrentUrl[0].toString() !== LastUrl.toString()) {
-        // send message in channel and set lasturl
-        if (CurrentUrl[0].toLowerCase().indexOf("humblebundle.com/store") > -1  || CurrentUrl[0].toLowerCase().indexOf("gog.com") > -1 || CurrentUrl[0].toLowerCase().indexOf("store.steampowered.com/app") > -1 )  {
-          if (CurrentTitle[0].toLowerCase().indexOf("dlc") > -1) {
-            client.channels.get('337987760025763840').send( " @everyone Nouveau DLC gratuit :   \n " + CurrentUrl[0] );
-            console.log("message DLC: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
-            LastUrl = CurrentUrl[0];
-          } else if (CurrentTitle[0].toLowerCase().indexOf("gwent") > -1) {
-              console.log("gwent : "+ CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
+     if (CurrentUrl[0].toString() === LastUrl.toString() || CurrentUrl[0].toString() === LastUrlBanned.toString()) {
+     } else if (CurrentUrl[0].toString() !== LastUrl.toString()) {  
+        if (CurrentUrl[0].toLowerCase().indexOf("humblebundle.com/store/") > -1  || CurrentUrl[0].toLowerCase().indexOf("gog.com") > -1 || CurrentUrl[0].toLowerCase().indexOf("store.steampowered.com/app") > -1 )  {
+          for ( i = 0; i < confBanlist.length; i++ ) {                
+            if (CurrentTitle[0].indexOf(confBanlist[i]) > -1 ){
+              console.log("banned : " + CurrentTitle[0]);
+              LastUrlBanned = CurrentUrl[0];
+              CurrentBan = 1;               
+            }
+          }
+          if (CurrentBan == 0 ) {
+            if (CurrentTitle[0].toLowerCase().indexOf("dlc") > -1) {
+              client.channels.get('337987760025763840').send( " @everyone Nouveau DLC gratuit :   \n " + CurrentUrl[0] );
+              console.log("message DLC: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
               LastUrl = CurrentUrl[0];
+            } else {
+               // send message in channel and set lasturl           
+              client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + CurrentUrl[0] );
+              console.log("message jeu: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
+              LastUrl = CurrentUrl[0];
+            }
           } else {
-            client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + CurrentUrl[0] );
-            console.log("message jeu: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
-            LastUrl = CurrentUrl[0];
+            CurrentBan = 0;
           }
         }
       }
@@ -69,6 +91,7 @@ client.on("ready", () => {
   });
   setTimeout(checkLink, tickRate2);
 };
+
 checkLink();
   //
   // Reddit Patch Function
