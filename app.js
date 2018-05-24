@@ -64,7 +64,7 @@ client.on("ready", () => {
      } else if (CurrentUrl[0].toString() !== LastUrl.toString()) {  
         if (CurrentUrl[0].toLowerCase().indexOf("humblebundle.com/store/") > -1  || CurrentUrl[0].toLowerCase().indexOf("gog.com") > -1 || CurrentUrl[0].toLowerCase().indexOf("store.steampowered.com/app") > -1 )  {
           for ( i = 0; i < confBanlist.length; i++ ) {                
-            if (CurrentTitle[0].indexOf(confBanlist[i]) > -1 ){
+            if (CurrentTitle[0].toLowerCase().indexOf(confBanlist[i]) > -1 ){
               console.log("banned : " + CurrentTitle[0]);
               LastUrlBanned = CurrentUrl[0];
               CurrentBan = 1;               
