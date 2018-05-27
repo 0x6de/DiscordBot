@@ -47,14 +47,7 @@ client.on("ready", () => {
   //
   function checkLink() {
   tickRate2 = 60000
-  
-  // next banlist method 
-  //
-  // confBanlist.push('test');
-  // var json = JSON.stringify(confBanlist);
-  // fs.writeFile('banlist.json', json);
-  // console.log(confBanlist);
-  
+
   //check new post
     r.getSubreddit('FreeGameFindings').getNew({limit: 1}).then(posts => {
      CurrentTitle = posts.map(post => post.title);
@@ -77,9 +70,18 @@ client.on("ready", () => {
               LastUrl = CurrentUrl[0];
             } else {
                // send message in channel and set lasturl           
-              client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + CurrentUrl[0] );
-              console.log("message jeu: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
-              LastUrl = CurrentUrl[0];
+               if(CurrentUrl[0].toLowerCase().indexOf("store.steampowered.com/app") > -1){
+                 var UrlParts = CurrentUrl[0].split("/");
+                 var InstallUrl = "steam://store/" + UrlParts[4];
+                client.channels.get('337987760025763840').send( " @everyone Nouveau jeu steam gratuit :   \n " + CurrentUrl[0] + "\n Ouvrir avec steam : " + InstallUrl );
+                console.log("message jeu steam: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
+                console.log("steam id url : " + InstallUrl);
+                LastUrl = CurrentUrl[0];
+               }else {
+                client.channels.get('337987760025763840').send( " @everyone Nouveau jeu gratuit :   \n " + CurrentUrl[0] );
+                console.log("message jeu: " + CurrentUrl[0]+"\ntitle: "+CurrentTitle[0]+"\nlink: "+ CurrentPermalink[0]);
+                LastUrl = CurrentUrl[0];
+               }
             }
           } else {
             CurrentBan = 0;
@@ -198,9 +200,11 @@ client.on("message", async message => {
   // return commands
   if(command === "help") {
     message.reply("\
-     \n :small_blue_diamond: /ping -> ping the bot to check the latency.\
+     \n :small_blue_diamond: /ping -> Ping the bot to check the latency.\
      \n :small_blue_diamond: /uptime -> Bot uptime in a clean format.\
-     \n :small_blue_diamond: /random -> random la classe americaine.");
+     \n :small_blue_diamond: /banlist -> Show the current banlist.\
+     \n :small_blue_diamond: /banlistadd -> Add a game to the banlist.\
+     \n :small_blue_diamond: /random -> Random la classe americaine.");
   }
   // return bot uptime
   if (command === "uptime") {
@@ -222,9 +226,29 @@ client.on("message", async message => {
     message.reply(tabVideos);
   }
 
+  if(command === "banlist"){
+    message.reply("banlist actuelle : "+ confBanlist);
+  }
+
+  if(command === "banlistadd"){
+    if(!message.member.roles.some(r=>["OP", "Modérateur", "Authentifié"].includes(r.name)) )
+      return message.reply("Sorry, you don't have permissions to use this!");
+    const banMessage = args.join(" ");
+    confBanlist.push(banMessage);
+    var json = JSON.stringify(confBanlist);
+    fs.writeFile('banlist.json', json);
+    
+    console.log("jeux ajouté à la banlist : " + banMessage);
+    console.log("banlist : " + confBanlist);
+    
+    message.channel.send(banMessage + " ajouté à la banlist avec succès.");
+    message.channel.send("banlist actuelle : " + confBanlist);
+
+  }
+
   if(command === "say") {
     // This command must be limited to OP and mod
-    if(!message.member.roles.some(r=>["OP", "Modérateur"].includes(r.name)) )
+    if(!message.member.roles.some(r=>["OP", "Modérateur", "Authentifié"].includes(r.name)) )
       return message.reply("Sorry, you don't have permissions to use this!");
     // makes the bot say something and delete the message. As an example, it's open to anyone to use.
     // To get the "message" itself we join the `args` back into a string with spaces:
